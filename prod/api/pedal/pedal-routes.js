@@ -16,8 +16,8 @@ var controller = _interopRequireWildcard(require("./pedal-controller"));
 var router = _express["default"].Router();
 
 //get all pedals
-router.get('/pedal', controller.index); //get single pedal by id
+router.get('/effect-pedals', controller.index); //get single pedal by id
 
-router.get('/pedal/:id', controller.show);
+router.get('/effect-pedals/:id', controller.show);
 var _default = router;
 exports["default"] = _default;

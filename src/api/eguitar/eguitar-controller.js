@@ -5,6 +5,8 @@ export async function index(_, res) {
   const client = await connectClient()
   const db = client.db(process.env.MONGO_DBNAME || 'guitar-finder')
 
+  console.log('fetching electric guitars')
+
   //get all electric guitars
   const eGutiars = await db.collection('electric-guitars').find({}).toArray()
   client.close()
@@ -16,6 +18,8 @@ export async function show(req, res) {
   const client = await connectClient()
   const db = client.db(process.env.MONGO_DBNAME || 'guitar-finder')
 
+  console.log(`fetching electric guitar with id ${eGuitarId}`)
+
   //get electric guitar
   const eGutiar = await db
     .collection('electric-guitars')
@@ -26,7 +30,7 @@ export async function show(req, res) {
   if (!eGutiar) {
     return res
       .status(404)
-      .json({ message: 'Electric guitar could ont be found' })
+      .json({ message: 'Electric guitar could not be found' })
   } else {
     return res.status(200).json(eGutiar)
   }

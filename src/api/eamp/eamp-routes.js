@@ -3,9 +3,9 @@ const router = express.Router()
 import * as controller from './eamp-controller'
 
 //get all electric amps
-router.get('/eamp', controller.index)
+router.get('/electric-amps', controller.index)
 
 //get single electric amp by id
-router.get('/eamp/:id', controller.show)
+router.get('/electric-amps/:id', controller.show)
 
 export default router

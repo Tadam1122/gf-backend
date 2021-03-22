@@ -32,17 +32,18 @@ function _index() {
 
           case 2:
             client = _context.sent;
-            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder'); //get all electric guitars
+            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder');
+            console.log('fetching electric guitars'); //get all electric guitars
 
-            _context.next = 6;
+            _context.next = 7;
             return db.collection('electric-guitars').find({}).toArray();
 
-          case 6:
+          case 7:
             eGutiars = _context.sent;
             client.close();
             return _context.abrupt("return", res.status(200).json(eGutiars));
 
-          case 9:
+          case 10:
           case "end":
             return _context.stop();
         }
@@ -69,30 +70,31 @@ function _show() {
 
           case 3:
             client = _context2.sent;
-            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder'); //get electric guitar
+            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder');
+            console.log("fetching electric guitar with id ".concat(eGuitarId)); //get electric guitar
 
-            _context2.next = 7;
+            _context2.next = 8;
             return db.collection('electric-guitars').findOne({
               _id: (0, _mongodb.ObjectId)(eGuitarId)
             });
 
-          case 7:
+          case 8:
             eGutiar = _context2.sent;
             client.close(); //no electric guitar found
 
             if (eGutiar) {
-              _context2.next = 13;
+              _context2.next = 14;
               break;
             }
 
             return _context2.abrupt("return", res.status(404).json({
-              message: 'Electric guitar could ont be found'
+              message: 'Electric guitar could not be found'
             }));
 
-          case 13:
+          case 14:
             return _context2.abrupt("return", res.status(200).json(eGutiar));
 
-          case 14:
+          case 15:
           case "end":
             return _context2.stop();
         }

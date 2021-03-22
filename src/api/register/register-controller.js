@@ -28,7 +28,7 @@ export async function create(req, res) {
   if (userCheck) {
     return res
       .status(409)
-      .json({ message: `Username '${req.body.username}' already taken` })
+      .json({ message: `Username '${req.body.username}' already taken./` })
   }
 
   //check if email not already used
@@ -36,7 +36,7 @@ export async function create(req, res) {
   if (emailCheck) {
     return res
       .status(409)
-      .json({ message: `Email '${req.body.email}' already taken` })
+      .json({ message: `Email '${req.body.email}' already taken./` })
   }
 
   //add new user
@@ -48,13 +48,13 @@ export async function create(req, res) {
 function validateIndex(body) {
   let errors = ''
   if (!body.username || !body.username.trim()) {
-    errors += 'Username required. '
+    errors += 'Username required./ '
   }
   if (!body.password || !body.password.trim()) {
-    errors += 'Password required. '
+    errors += 'Password required./ '
   }
   if (!body.email || !body.email.trim()) {
-    errors += 'Email required. '
+    errors += 'Email required./ '
   }
   return {
     isValid: !errors || !errors.trim(),

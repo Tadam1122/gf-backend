@@ -3,9 +3,9 @@ const router = express.Router()
 import * as controller from './pedal-controller'
 
 //get all pedals
-router.get('/pedal', controller.index)
+router.get('/effect-pedals', controller.index)
 
 //get single pedal by id
-router.get('/pedal/:id', controller.show)
+router.get('/effect-pedals/:id', controller.show)
 
 export default router

@@ -75,7 +75,7 @@ function _create() {
             }
 
             return _context.abrupt("return", res.status(409).json({
-              message: "Username '".concat(req.body.username, "' already taken")
+              message: "Username '".concat(req.body.username, "' already taken./")
             }));
 
           case 19:
@@ -93,7 +93,7 @@ function _create() {
             }
 
             return _context.abrupt("return", res.status(409).json({
-              message: "Email '".concat(req.body.email, "' already taken")
+              message: "Email '".concat(req.body.email, "' already taken./")
             }));
 
           case 24:
@@ -118,15 +118,15 @@ function validateIndex(body) {
   var errors = '';
 
   if (!body.username || !body.username.trim()) {
-    errors += 'Username required. ';
+    errors += 'Username required./ ';
   }
 
   if (!body.password || !body.password.trim()) {
-    errors += 'Password required. ';
+    errors += 'Password required./ ';
   }
 
   if (!body.email || !body.email.trim()) {
-    errors += 'Email required. ';
+    errors += 'Email required./ ';
   }
 
   return {

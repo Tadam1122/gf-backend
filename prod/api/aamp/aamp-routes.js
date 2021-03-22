@@ -16,8 +16,8 @@ var controller = _interopRequireWildcard(require("./aamp-controller"));
 var router = _express["default"].Router();
 
 //get all acoustic amps
-router.get('/aamp', controller.index); //get single acoustic amp by id
+router.get('/acoustic-amps', controller.index); //get single acoustic amp by id
 
-router.get('/aamp/:id', controller.show);
+router.get('/acoustic-amps/:id', controller.show);
 var _default = router;
 exports["default"] = _default;
