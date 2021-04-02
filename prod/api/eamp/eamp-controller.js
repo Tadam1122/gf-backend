@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.index = index;
 exports.show = show;
+exports.update = update;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -32,17 +33,18 @@ function _index() {
 
           case 2:
             client = _context.sent;
-            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder'); //get all electric amps
+            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder');
+            console.log('fetching electric amplifiers'); //get all electric amps
 
-            _context.next = 6;
+            _context.next = 7;
             return db.collection('electric-amps').find({}).toArray();
 
-          case 6:
+          case 7:
             eAmps = _context.sent;
             client.close();
             return _context.abrupt("return", res.status(200).json(eAmps));
 
-          case 9:
+          case 10:
           case "end":
             return _context.stop();
         }
@@ -69,19 +71,20 @@ function _show() {
 
           case 3:
             client = _context2.sent;
-            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder'); //get acoustic amp
+            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder');
+            console.log("fetching electric amplifier with id ".concat(eAmpId)); //get acoustic amp
 
-            _context2.next = 7;
+            _context2.next = 8;
             return db.collection('electric-amps').findOne({
               _id: (0, _mongodb.ObjectId)(eAmpId)
             });
 
-          case 7:
+          case 8:
             eAmp = _context2.sent;
             client.close(); //no acoustic amp found
 
             if (eAmp) {
-              _context2.next = 13;
+              _context2.next = 14;
               break;
             }
 
@@ -89,10 +92,10 @@ function _show() {
               message: 'Electric amp could ont be found'
             }));
 
-          case 13:
+          case 14:
             return _context2.abrupt("return", res.status(200).json(eAmp));
 
-          case 14:
+          case 15:
           case "end":
             return _context2.stop();
         }
@@ -100,4 +103,46 @@ function _show() {
     }, _callee2);
   }));
   return _show.apply(this, arguments);
+}
+
+function update(_x5, _x6) {
+  return _update.apply(this, arguments);
+}
+
+function _update() {
+  _update = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(req, res) {
+    var eAmp, eAmpId, client, db;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            eAmp = req.body;
+            eAmpId = req.body.id;
+            console.log("updating electric amplifier with id ".concat(eAmpId));
+            _context3.next = 5;
+            return (0, _connect.connectClient)();
+
+          case 5:
+            client = _context3.sent;
+            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder'); //update electric amp
+
+            _context3.next = 9;
+            return db.collection('electric-amps').updateOne({
+              _id: (0, _mongodb.ObjectId)(eAmpId)
+            }, {
+              $set: eAmp
+            });
+
+          case 9:
+            client.close();
+            return _context3.abrupt("return", res.status(200).json(eAmp));
+
+          case 11:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }));
+  return _update.apply(this, arguments);
 }

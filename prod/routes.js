@@ -25,6 +25,8 @@ var _userRoutes = _interopRequireDefault(require("./api/user/user-routes"));
 
 var _wishlistRoutes = _interopRequireDefault(require("./api/wishlist/wishlist-routes"));
 
+var _searchRoutes = _interopRequireDefault(require("./api/search/search-routes"));
+
 function registerRoutes(app) {
   app.use('/api', _authRoutes["default"]);
   app.use('/api', _registerRoutes["default"]);
@@ -35,4 +37,5 @@ function registerRoutes(app) {
   app.use('/api', _pedalRoutes["default"]);
   app.use('/api', _userRoutes["default"]);
   app.use('/api', _wishlistRoutes["default"]);
+  app.use('/api', _searchRoutes["default"]);
 }

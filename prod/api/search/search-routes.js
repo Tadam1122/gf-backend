@@ -11,13 +11,11 @@ exports["default"] = void 0;
 
 var _express = _interopRequireDefault(require("express"));
 
-var controller = _interopRequireWildcard(require("./eamp-controller"));
+var controller = _interopRequireWildcard(require("./search-controller"));
 
 var router = _express["default"].Router();
 
-//get all electric amps
-router.get('/eamp', controller.index); //get single electric amp by id
-
-router.get('/eamp/:id', controller.show);
+//search products given a query
+router.get('/search/:query', controller.show);
 var _default = router;
 exports["default"] = _default;

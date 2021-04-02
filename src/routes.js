@@ -7,6 +7,7 @@ import eampRoutes from './api/eamp/eamp-routes'
 import pedalRoutes from './api/pedal/pedal-routes'
 import userRoutes from './api/user/user-routes'
 import wishlistRoutes from './api/wishlist/wishlist-routes'
+import searchRoutes from './api/search/search-routes'
 
 export function registerRoutes(app) {
   app.use('/api', authRoutes)
@@ -18,4 +19,5 @@ export function registerRoutes(app) {
   app.use('/api', pedalRoutes)
   app.use('/api', userRoutes)
   app.use('/api', wishlistRoutes)
+  app.use('/api', searchRoutes)
 }

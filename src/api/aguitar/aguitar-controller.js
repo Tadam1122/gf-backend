@@ -5,6 +5,8 @@ export async function index(_, res) {
   const client = await connectClient()
   const db = client.db(process.env.MONGO_DBNAME || 'guitar-finder')
 
+  console.log('fetching acoustic guitars')
+
   //get all acoustic guitars
   const aGutiars = await db.collection('acoustic-guitars').find({}).toArray()
   client.close()
@@ -15,6 +17,8 @@ export async function show(req, res) {
   const aGuitarId = req.params.id
   const client = await connectClient()
   const db = client.db(process.env.MONGO_DBNAME || 'guitar-finder')
+
+  console.log(`fetching acoustic guitar with id ${aGuitarId}`)
 
   //get acoustic guitar
   const aGutiar = await db
@@ -30,4 +34,21 @@ export async function show(req, res) {
   } else {
     return res.status(200).json(aGutiar)
   }
+}
+
+export async function update(req, res) {
+  const aGuitar = req.body
+  const aGuitarId = req.body.id
+
+  console.log(`updating acoustic guitar with id ${aGuitarId}`)
+
+  const client = await connectClient()
+  const db = client.db(process.env.MONGO_DBNAME || 'guitar-finder')
+
+  //update acoustic guitar
+  await db
+    .collection('acoustic-guitars')
+    .updateOne({ _id: ObjectId(aGuitarId) }, { $set: aGuitar })
+  client.close()
+  return res.status(200).json(aGuitar)
 }
