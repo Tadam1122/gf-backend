@@ -54,9 +54,10 @@ function _index() {
 
           case 9:
             user = _context.sent;
+            console.log(user); //user not found
 
             if (user) {
-              _context.next = 12;
+              _context.next = 13;
               break;
             }
 
@@ -64,15 +65,15 @@ function _index() {
               message: 'Username or password did not match'
             }));
 
-          case 12:
-            _context.next = 14;
+          case 13:
+            _context.next = 15;
             return _argon["default"].verify(user.password, req.body.password);
 
-          case 14:
+          case 15:
             pwMatch = _context.sent;
 
             if (pwMatch) {
-              _context.next = 17;
+              _context.next = 18;
               break;
             }
 
@@ -80,14 +81,14 @@ function _index() {
               message: 'Username or password did not match'
             }));
 
-          case 17:
+          case 18:
             client.close();
             token = (0, _authServices.generateJWT)(user);
             return _context.abrupt("return", res.status(200).json({
               token: token
             }));
 
-          case 20:
+          case 21:
           case "end":
             return _context.stop();
         }
