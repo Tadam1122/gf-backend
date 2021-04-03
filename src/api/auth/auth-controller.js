@@ -16,7 +16,6 @@ export async function index(req, res) {
     .collection('users')
     .findOne({ username: req.body.username.toLowerCase() })
 
-  console.log(user)
   //user not found
   if (!user) {
     return res
