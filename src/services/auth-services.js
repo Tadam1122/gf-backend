@@ -4,6 +4,7 @@ export function generateJWT(user) {
   const tokenData = {
     username: user.username,
     id: user._id,
+    wishlists: user.wishlists,
   }
   return jwt.sign(
     { user: tokenData },

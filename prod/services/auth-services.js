@@ -16,7 +16,8 @@ var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 function generateJWT(user) {
   var tokenData = {
     username: user.username,
-    id: user._id
+    id: user._id,
+    wishlists: user.wishlists
   };
   return _jsonwebtoken["default"].sign({
     user: tokenData
