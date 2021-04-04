@@ -1,9 +1,11 @@
 import express from 'express'
 import cors from 'cors'
 import { registerRoutes } from './routes'
+import { scrapePrices } from './services/prod-services'
 
 const app = express()
 const port = process.env.PORT || 8000
+const refreshTime = 60 * 10000 * 60 * 24
 
 app.use(cors())
 app.use(express.json())
@@ -15,11 +17,7 @@ app.use(
 
 registerRoutes(app)
 
-// app.get('/', (req, res) => {
-//   console.log('client connected')
-//   res.send({ message: 'hello from server!' })
-// })
-
 app.listen(port, () => {
-  console.log('app listening on port 8000')
+  console.log(`app listening on port ${port}`)
+  setInterval(scrapePrices, refreshTime)
 })
