@@ -19,5 +19,5 @@ registerRoutes(app)
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)
-  setInterval(scrapePrices, refreshTime)
+  setInterval(scrapePrices, 20 * 1000)
 })

@@ -100,7 +100,7 @@ function _scrapePrices() {
 
           case 38:
             if (!(i < eGuitars.length)) {
-              _context.next = 60;
+              _context.next = 59;
               break;
             }
 
@@ -111,14 +111,14 @@ function _scrapePrices() {
 
           case 43:
             if (!(j < eGuitar.prices.length)) {
-              _context.next = 54;
+              _context.next = 53;
               break;
             }
 
             price = void 0;
 
             if (!(eGuitar.prices[j].website === 'American Musical Supply')) {
-              _context.next = 50;
+              _context.next = 49;
               break;
             }
 
@@ -127,9 +127,8 @@ function _scrapePrices() {
 
           case 48:
             price = _context.sent;
-            console.log(price);
 
-          case 50:
+          case 49:
             //   if (eGuitar.prices[j].website === 'Sweetwater') {
             //     price = priceSweetwater(store.url, page)
             //   }
@@ -138,36 +137,36 @@ function _scrapePrices() {
             //   }
             if (price) eGuitar.prices[j].price = price;
 
-          case 51:
+          case 50:
             j++;
             _context.next = 43;
             break;
 
-          case 54:
-            _context.next = 56;
+          case 53:
+            _context.next = 55;
             return db.collection('electric-guitars').updateOne({
               _id: (0, _mongodb.ObjectId)(eGuitarId)
             }, {
               $set: eGuitar
             });
 
-          case 56:
+          case 55:
             eGuitarBar.increment();
 
-          case 57:
+          case 56:
             i++;
             _context.next = 38;
             break;
 
-          case 60:
+          case 59:
             eGuitarBar.stop();
             console.log('Updating acoustic guitar prices...');
             aGuitarBar.start(aGuitars.length, 0);
             _i = 0;
 
-          case 64:
+          case 63:
             if (!(_i < aGuitars.length)) {
-              _context.next = 85;
+              _context.next = 84;
               break;
             }
 
@@ -176,26 +175,26 @@ function _scrapePrices() {
             aGuitarId = eGuitars[_i]._id.$oid;
             _j = 0;
 
-          case 69:
+          case 68:
             if (!(_j < aGuitar.prices.length)) {
-              _context.next = 79;
+              _context.next = 78;
               break;
             }
 
             _price = void 0;
 
             if (!(aGuitar.prices[_j].website === 'American Musical Supply')) {
-              _context.next = 75;
+              _context.next = 74;
               break;
             }
 
-            _context.next = 74;
+            _context.next = 73;
             return require("../../prod/services/scrape-services")["priceAMS"](aGuitar.prices[_j].url, page);
 
-          case 74:
+          case 73:
             _price = _context.sent;
 
-          case 75:
+          case 74:
             //   if (aGuitar.prices[j].website === 'Sweetwater') {
             //     price = priceSweetwater(store.url, page)
             //   }
@@ -204,37 +203,37 @@ function _scrapePrices() {
             //   }
             if (_price) aGuitar.prices[_j].price = _price;
 
-          case 76:
+          case 75:
             _j++;
-            _context.next = 69;
+            _context.next = 68;
             break;
 
-          case 79:
-            _context.next = 81;
+          case 78:
+            _context.next = 80;
             return db.collection('acoustic-guitars').updateOne({
               _id: (0, _mongodb.ObjectId)(aGuitarId)
             }, {
               $set: aGuitar
             });
 
-          case 81:
+          case 80:
             aGuitarBar.increment();
 
-          case 82:
+          case 81:
             _i++;
-            _context.next = 64;
+            _context.next = 63;
             break;
 
-          case 85:
+          case 84:
             aGuitarBar.stop();
             console.log('Updating electric amplifier prices...');
             eAmpBar.start(eAmps.length, 0);
             count = 0;
             _i2 = 0;
 
-          case 90:
+          case 89:
             if (!(_i2 < eAmps.length)) {
-              _context.next = 111;
+              _context.next = 110;
               break;
             }
 
@@ -243,26 +242,26 @@ function _scrapePrices() {
             eAmpId = eAmps[_i2]._id.$oid;
             _j2 = 0;
 
-          case 95:
+          case 94:
             if (!(_j2 < eAmp.prices.length)) {
-              _context.next = 105;
+              _context.next = 104;
               break;
             }
 
             _price2 = void 0;
 
             if (!(eAmp.prices[_j2].website === 'American Musical Supply')) {
-              _context.next = 101;
+              _context.next = 100;
               break;
             }
 
-            _context.next = 100;
-            return require("../../prod/services/scrape-services")["priceAMS"](eAmp.prices[_j2].url, page);
+            _context.next = 99;
+            return require("./scrape-services")["priceAMS"](eAmp.prices[_j2].url, page);
 
-          case 100:
+          case 99:
             _price2 = _context.sent;
 
-          case 101:
+          case 100:
             //   if (eAmp.prices[j].website === 'Sweetwater') {
             //     price = priceSweetwater(store.url, page)
             //   }
@@ -271,36 +270,36 @@ function _scrapePrices() {
             //   }
             if (_price2) eAmp.prices[_j2].price = _price2;
 
-          case 102:
+          case 101:
             _j2++;
-            _context.next = 95;
+            _context.next = 94;
             break;
 
-          case 105:
-            _context.next = 107;
+          case 104:
+            _context.next = 106;
             return db.collection('electric-amps').updateOne({
               _id: (0, _mongodb.ObjectId)(eAmpId)
             }, {
               $set: eAmp
             });
 
-          case 107:
+          case 106:
             eAmpBar.increment();
 
-          case 108:
+          case 107:
             _i2++;
-            _context.next = 90;
+            _context.next = 89;
             break;
 
-          case 111:
+          case 110:
             eAmpBar.stop();
             console.log('Updating acoustic amplifier prices...');
             aAmpBar.start(aAmps.length, 0);
             _i3 = 0;
 
-          case 115:
+          case 114:
             if (!(_i3 < aAmps.length)) {
-              _context.next = 136;
+              _context.next = 135;
               break;
             }
 
@@ -309,26 +308,26 @@ function _scrapePrices() {
             aAmpId = aAmps[_i3]._id.$oid;
             _j3 = 0;
 
-          case 120:
+          case 119:
             if (!(_j3 < aAmp.prices.length)) {
-              _context.next = 130;
+              _context.next = 129;
               break;
             }
 
             _price3 = void 0;
 
             if (!(aAmp.prices[_j3].website === 'American Musical Supply')) {
-              _context.next = 126;
+              _context.next = 125;
               break;
             }
 
-            _context.next = 125;
+            _context.next = 124;
             return require("../../prod/services/scrape-services")["priceAMS"](aAmp.prices[_j3].url, page);
 
-          case 125:
+          case 124:
             _price3 = _context.sent;
 
-          case 126:
+          case 125:
             //   if (aAmp.prices[j].website === 'Sweetwater') {
             //     price = priceSweetwater(store.url, page)
             //   }
@@ -337,36 +336,36 @@ function _scrapePrices() {
             //   }
             if (_price3) aAmp.prices[_j3].price = _price3;
 
-          case 127:
+          case 126:
             _j3++;
-            _context.next = 120;
+            _context.next = 119;
             break;
 
-          case 130:
-            _context.next = 132;
+          case 129:
+            _context.next = 131;
             return db.collection('acoustic-amps').updateOne({
               _id: (0, _mongodb.ObjectId)(aAmpId)
             }, {
               $set: aAmp
             });
 
-          case 132:
+          case 131:
             aAmpBar.increment();
 
-          case 133:
+          case 132:
             _i3++;
-            _context.next = 115;
+            _context.next = 114;
             break;
 
-          case 136:
+          case 135:
             aAmpBar.stop();
             console.log('Updating effect pedal prices...');
             pedalBar.start(pedals.length, 0);
             _i4 = 0;
 
-          case 140:
+          case 139:
             if (!(_i4 < pedals.length)) {
-              _context.next = 161;
+              _context.next = 160;
               break;
             }
 
@@ -375,26 +374,26 @@ function _scrapePrices() {
             pedalId = pedals[_i4]._id.$oid;
             _j4 = 0;
 
-          case 145:
+          case 144:
             if (!(_j4 < pedal.prices.length)) {
-              _context.next = 155;
+              _context.next = 154;
               break;
             }
 
             _price4 = void 0;
 
             if (!(pedal.prices[_j4].website === 'American Musical Supply')) {
-              _context.next = 151;
+              _context.next = 150;
               break;
             }
 
-            _context.next = 150;
+            _context.next = 149;
             return require("../../prod/services/scrape-services")["priceAMS"](pedal.prices[_j4].url, page);
 
-          case 150:
+          case 149:
             _price4 = _context.sent;
 
-          case 151:
+          case 150:
             //   if (pedal.prices[j].website === 'Sweetwater') {
             //     price = priceSweetwater(store.url, page)
             //   }
@@ -403,33 +402,33 @@ function _scrapePrices() {
             //   }
             if (_price4) pedal.prices[_j4].price = _price4;
 
-          case 152:
+          case 151:
             _j4++;
-            _context.next = 145;
+            _context.next = 144;
             break;
 
-          case 155:
-            _context.next = 157;
+          case 154:
+            _context.next = 156;
             return db.collection('effect-pedals').updateOne({
               _id: (0, _mongodb.ObjectId)(pedalId)
             }, {
               $set: pedal
             });
 
-          case 157:
+          case 156:
             pedalBar.increment();
 
-          case 158:
+          case 157:
             _i4++;
-            _context.next = 140;
+            _context.next = 139;
             break;
 
-          case 161:
+          case 160:
             pedalBar.stop();
-            _context.next = 164;
+            _context.next = 163;
             return browser.close();
 
-          case 164:
+          case 163:
           case "end":
             return _context.stop();
         }

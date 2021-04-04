@@ -62,7 +62,6 @@ export async function scrapePrices() {
         price = await require(`../../prod/services/scrape-services`)[
           `priceAMS`
         ](eGuitar.prices[j].url, page)
-        console.log(price)
       }
       //   if (eGuitar.prices[j].website === 'Sweetwater') {
       //     price = priceSweetwater(store.url, page)
@@ -121,9 +120,10 @@ export async function scrapePrices() {
     for (let j = 0; j < eAmp.prices.length; j++) {
       let price
       if (eAmp.prices[j].website === 'American Musical Supply') {
-        price = await require(`../../prod/services/scrape-services`)[
-          `priceAMS`
-        ](eAmp.prices[j].url, page)
+        price = await require(`./scrape-services`)[`priceAMS`](
+          eAmp.prices[j].url,
+          page
+        )
       }
       //   if (eAmp.prices[j].website === 'Sweetwater') {
       //     price = priceSweetwater(store.url, page)
