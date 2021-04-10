@@ -10,11 +10,6 @@ export async function scrapePrices() {
   console.log('updating product prices...')
 
   //get all product data
-  let eGuitars = await db.collection('electric-guitars').find({}).toArray()
-  let aGuitars = await db.collection('acoustic-guitars').find({}).toArray()
-  let eAmps = await db.collection('electric-amps').find({}).toArray()
-  let aAmps = await db.collection('acoustic-amps').find({}).toArray()
-  let pedals = await db.collection('effect-pedals').find({}).toArray()
 
   const eGuitarBar = new cliProgress.SingleBar(
     {},
@@ -48,39 +43,61 @@ export async function scrapePrices() {
   await page.setDefaultNavigationTimeout(0)
   // page.on('console', (msg) => console.log('PAGE LOG:', msg.text()))
 
+  const eGuitars = await db.collection('electric-guitars').find({}).toArray()
+
   console.log('Updating electric guitar prices...')
   eGuitarBar.start(eGuitars.length, 0)
 
   for (let i = 0; i < eGuitars.length; i++) {
     let eGuitar = { ...eGuitars[i] }
     delete eGuitar._id
-    const eGuitarId = eGuitars[i]._id.$oid
+    const eGuitarId = eGuitars[i]._id
 
+    let inStock = false
     for (let j = 0; j < eGuitar.prices.length; j++) {
       let price
       if (eGuitar.prices[j].website === 'American Musical Supply') {
-        price = await require(`../../prod/services/scrape-services`)[
+        let data = await require(`../../prod/services/scrape-services`)[
           `priceAMS`
         ](eGuitar.prices[j].url, page)
+        price = data.price
+        inStock = inStock ? inStock : data.inStock
       }
-      //   if (eGuitar.prices[j].website === 'Sweetwater') {
-      //     price = priceSweetwater(store.url, page)
-      //   }
-      //   if (eGuitar.prices[j].website === 'Musicians Friend') {
-      //     price = priceMF(store.url, page)
-      //   }
+      if (eGuitar.prices[j].website === 'Sweetwater') {
+        if (eGuitar.prices[j].url) {
+          let data = await require(`../../prod/services/scrape-services`)[
+            `priceSweetwater`
+          ](eGuitar.prices[j].url, page)
+          price = data.price
+          inStock = inStock ? inStock : data.inStock
+        }
+      }
+      if (eGuitar.prices[j].website === 'Musicians Friend') {
+        if (eGuitar.prices[j].url) {
+          let data = await require(`../../prod/services/scrape-services`)[
+            `priceMF`
+          ](eGuitar.prices[j].url, page)
+          price = data.price
+          inStock = inStock ? inStock : data.inStock
+        }
+      }
       if (price) eGuitar.prices[j].price = price
     }
+    eGuitar.inStock = inStock
     await db
       .collection('electric-guitars')
       .updateOne({ _id: ObjectId(eGuitarId) }, { $set: eGuitar })
+
     eGuitarBar.increment()
   }
   eGuitarBar.stop()
 
+  const aGuitars = await db.collection('acoustic-guitars').find({}).toArray()
+
   console.log('Updating acoustic guitar prices...')
   aGuitarBar.start(aGuitars.length, 0)
 
+  //TODO: update the other product categories to follow electric guitar alg
   for (let i = 0; i < aGuitars.length; i++) {
     let aGuitar = { ...aGuitars[i] }
     delete aGuitar._id
@@ -107,6 +124,8 @@ export async function scrapePrices() {
     aGuitarBar.increment()
   }
   aGuitarBar.stop()
+
+  const eAmps = await db.collection('electric-amps').find({}).toArray()
 
   console.log('Updating electric amplifier prices...')
   eAmpBar.start(eAmps.length, 0)
@@ -140,6 +159,8 @@ export async function scrapePrices() {
   }
   eAmpBar.stop()
 
+  const aAmps = await db.collection('acoustic-amps').find({}).toArray()
+
   console.log('Updating acoustic amplifier prices...')
   aAmpBar.start(aAmps.length, 0)
 
@@ -170,6 +191,8 @@ export async function scrapePrices() {
   }
   aAmpBar.stop()
 
+  const pedals = await db.collection('effect-pedals').find({}).toArray()
+
   console.log('Updating effect pedal prices...')
   pedalBar.start(pedals.length, 0)
 
@@ -180,18 +203,34 @@ export async function scrapePrices() {
 
     for (let j = 0; j < pedal.prices.length; j++) {
       let price
+      let inStock = false
       if (pedal.prices[j].website === 'American Musical Supply') {
-        price = await require(`../../prod/services/scrape-services`)[
-          `priceAMS`
-        ](pedal.prices[j].url, page)
+        if (pedal.prices[j].url) {
+          price = await require(`../../prod/services/scrape-services`)[
+            `priceAMS`
+          ](pedal.prices[j].url, page)
+        }
       }
-      //   if (pedal.prices[j].website === 'Sweetwater') {
-      //     price = priceSweetwater(store.url, page)
-      //   }
-      //   if (pedal.prices[j].website === 'Musicians Friend') {
-      //     price = priceMF(store.url, page)
-      //   }
+      if (pedal.prices[j].website === 'Sweetwater') {
+        if (pedal.prices[j].url) {
+          let data = await require(`../../prod/services/scrape-services`)[
+            `priceSweetwater`
+          ](pedal.prices[j].url, page)
+          price = data.price
+          inStock = data.inStock
+        }
+      }
+      if (pedal.prices[j].website === 'Musicians Friend') {
+        if (pedal.prices[j].url) {
+          let data = await require(`../../prod/services/scrape-services`)[
+            `priceMF`
+          ](pedal.prices[j].url, page)
+          price = data.price
+          inStock = data.inStock
+        }
+      }
       if (price) pedal.prices[j].price = price
+      pedal.inStock = inStock
     }
     await db
       .collection('effect-pedals')

@@ -1,4 +1,7 @@
 // page evaluate function breaks when transpiled
+// copy file to prod instead of letting babel transpile these functions
+
+// find both price and in stock element for AMS products
 async function priceAMS(link, page) {
   await page.goto(link, { waitUntil: 'networkidle2' })
   const data = await page.evaluate(async () => {
@@ -7,6 +10,7 @@ async function priceAMS(link, page) {
     body.click()
 
     let price = ''
+    let inStock = false
     if (
       document.querySelector(
         '#specificationSwatchControl > div > div.specification-swatch-control--item-purchase > div.item-purchase--item-price-details > div > span.webprice.pricing'
@@ -18,14 +22,27 @@ async function priceAMS(link, page) {
         )
         .innerText.split('.')[0]
     }
-    return price
+    if (
+      document.querySelector(
+        '#specificationSwatchControl > div > div.specification-swatch-control--item-purchase > div.item-purchase--item-availability-message.ng-binding > label.iteminstock > span > strong'
+      )
+    ) {
+      if (
+        document
+          .querySelector(
+            '#specificationSwatchControl > div > div.specification-swatch-control--item-purchase > div.item-purchase--item-availability-message.ng-binding > label.iteminstock > span > strong'
+          )
+          .innerText.includes('In Stock')
+      ) {
+        inStock = true
+      }
+    }
+    return { price, inStock }
   })
   return data
 }
 
-// TODO: copy over this file anytime you update it since this file breaks when babel transpiles it
-
-//TODO: find price element for sweetwater products
+// find both price and in stock element for sweetwater products
 async function priceSweetwater(link, page) {
   await page.goto(link, { waitUntil: 'networkidle2' })
   const data = await page.evaluate(async () => {
@@ -36,23 +53,38 @@ async function priceSweetwater(link, page) {
 
     //get price data
     let price = ''
+    let inStock = false
+    document.querySelector(
+      '#product-options > div:nth-child(1) > div > div.product-price--final > price > dollars'
+    )
     if (
       document.querySelector(
-        '#specificationSwatchControl > div > div.specification-swatch-control--item-purchase > div.item-purchase--item-price-details > div > span.webprice.pricing'
+        '#product-options > div:nth-child(1) > div > div.product-price--final > price > dollars'
       )
     ) {
-      price = document
-        .querySelector(
-          '#specificationSwatchControl > div > div.specification-swatch-control--item-purchase > div.item-purchase--item-price-details > div > span.webprice.pricing'
-        )
-        .innerText.split('.')[0]
+      price = `$${
+        document.querySelector(
+          '#product-options > div:nth-child(1) > div > div.product-price--final > price > dollars'
+        ).innerText
+      }`
     }
-    return price
+    //check for in stock element
+    if (
+      document.querySelector('#product-options > div.product-avail > strong')
+    ) {
+      if (
+        document.querySelector('#product-options > div.product-avail > strong')
+          .innerText === 'In Stock!'
+      ) {
+        inStock = true
+      }
+    }
+    return { price, inStock }
   })
   return data
 }
 
-//TODO: find price element for musicians friend products
+// find both price and in stock element for mf products
 async function priceMF(link, page) {
   await page.goto(link, { waitUntil: 'networkidle2' })
   const data = await page.evaluate(async () => {
@@ -63,18 +95,34 @@ async function priceMF(link, page) {
 
     //get price data
     let price = ''
+    let inStock = false
     if (
       document.querySelector(
-        '#specificationSwatchControl > div > div.specification-swatch-control--item-purchase > div.item-purchase--item-price-details > div > span.webprice.pricing'
+        '#mainContent > main > div.pdp-desktop-section > div.pdp-details-wrapper > div.pdp-section.pdp-section-buy.-inner-card > div.price-display > span > span:nth-child(1)'
       )
     ) {
       price = document
         .querySelector(
-          '#specificationSwatchControl > div > div.specification-swatch-control--item-purchase > div.item-purchase--item-price-details > div > span.webprice.pricing'
+          '#mainContent > main > div.pdp-desktop-section > div.pdp-details-wrapper > div.pdp-section.pdp-section-buy.-inner-card > div.price-display > span > span:nth-child(1)'
         )
         .innerText.split('.')[0]
     }
-    return price
+    if (
+      document.querySelector(
+        '#mainContent > main > div.pdp-desktop-section > div.pdp-details-wrapper > div.pdp-section.pdp-section-buy.-inner-card > div.inventory-messaging > span'
+      )
+    ) {
+      if (
+        document
+          .querySelector(
+            '#mainContent > main > div.pdp-desktop-section > div.pdp-details-wrapper > div.pdp-section.pdp-section-buy.-inner-card > div.inventory-messaging > span'
+          )
+          .innerText.includes('In Stock')
+      ) {
+        inStock = true
+      }
+    }
+    return { price, inStock }
   })
   return data
 }
