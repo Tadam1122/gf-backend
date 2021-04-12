@@ -106,6 +106,7 @@ async function priceMF(link, page) {
           '#mainContent > main > div.pdp-desktop-section > div.pdp-details-wrapper > div.pdp-section.pdp-section-buy.-inner-card > div.price-display > span > span:nth-child(1)'
         )
         .innerText.split('.')[0]
+      price = `$${price}`
     }
     if (
       document.querySelector(

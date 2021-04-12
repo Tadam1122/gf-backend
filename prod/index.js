@@ -20,6 +20,7 @@ app.use(_express["default"].urlencoded({
 }));
 (0, _routes.registerRoutes)(app);
 app.listen(port, function () {
-  console.log("app listening on port ".concat(port));
-  setInterval(_prodServices.scrapePrices, refreshTime); // setTimeout(scrapePrices, 5000)
+  console.log("app listening on port ".concat(port)); // setInterval(scrapePrices, refreshTime)
+
+  setTimeout(_prodServices.scrapePrices, 5000);
 });
