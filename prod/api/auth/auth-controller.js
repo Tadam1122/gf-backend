@@ -42,7 +42,10 @@ function _index() {
 
           case 3:
             _context.next = 5;
-            return (0, _connect.connectClient)();
+            return MongoClient.connect(process.env.MONGO_USER && process.env.MONGO_PASS ? "mongodb+srv://".concat(process.env.MONGO_USER, ":").concat(process.env.MONGO_PASS, "@cluster0.co9dm.mongodb.net/").concat(process.env.MONGO_DBNAME, "?retryWrites=true&w=majority") : 'mongodb://localhost:27017', {
+              useUnifiedTopology: true,
+              useNewUrlParser: true
+            });
 
           case 5:
             client = _context.sent;
