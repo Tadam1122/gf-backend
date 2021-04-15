@@ -1,0 +1,24 @@
+<svg id="Component_12" data-name="Component 12" xmlns="http://www.w3.org/2000/svg" width="74" height="79" viewBox="0 0 74 79">
+  <rect id="Rectangle_8" data-name="Rectangle 8" width="74" height="79" rx="7" fill="#fff"/>
+  <g id="Component_14_1" data-name="Component 14 – 1" transform="translate(7 17)">
+    <rect id="Rectangle_26" data-name="Rectangle 26" width="61" height="53" rx="2" transform="translate(0 6)" fill="#ffe599"/>
+    <g id="Rectangle_27" data-name="Rectangle 27" fill="#fff4d4" stroke="#000" stroke-linejoin="round" stroke-width="0.25">
+      <rect width="61" height="11" rx="2" stroke="none"/>
+      <rect x="0.125" y="0.125" width="60.75" height="10.75" rx="1.875" fill="none"/>
+    </g>
+    <circle id="Ellipse_10" data-name="Ellipse 10" cx="2.5" cy="2.5" r="2.5" transform="translate(5 3)"/>
+    <rect id="Rectangle_28" data-name="Rectangle 28" width="1" height="2" transform="translate(7 3)" fill="#fff"/>
+    <circle id="Ellipse_11" data-name="Ellipse 11" cx="2.5" cy="2.5" r="2.5" transform="translate(14 3)"/>
+    <rect id="Rectangle_29" data-name="Rectangle 29" width="1" height="2" transform="translate(16 3)" fill="#fff"/>
+    <circle id="Ellipse_12" data-name="Ellipse 12" cx="2.5" cy="2.5" r="2.5" transform="translate(23 3)"/>
+    <rect id="Rectangle_30" data-name="Rectangle 30" width="1" height="2" transform="translate(25 3)" fill="#fff"/>
+    <circle id="Ellipse_13" data-name="Ellipse 13" cx="2.5" cy="2.5" r="2.5" transform="translate(32 3)"/>
+    <rect id="Rectangle_31" data-name="Rectangle 31" width="1" height="2" transform="translate(34 3)" fill="#fff"/>
+    <rect id="Rectangle_32" data-name="Rectangle 32" width="4" height="2" transform="translate(52 6)"/>
+    <rect id="Rectangle_33" data-name="Rectangle 33" width="4" height="2" transform="translate(52 3)" fill="#f77"/>
+    <g id="Rectangle_34" data-name="Rectangle 34" transform="translate(1 13)" fill="#bfa966" stroke="#000" stroke-width="0.25">
+      <rect width="59" height="45" rx="2" stroke="none"/>
+      <rect x="0.125" y="0.125" width="58.75" height="44.75" rx="1.875" fill="none"/>
+    </g>
+  </g>
+</svg>
