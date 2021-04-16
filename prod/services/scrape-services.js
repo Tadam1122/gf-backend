@@ -107,7 +107,6 @@ async function priceMF(link, page) {
         )
         .innerText.split('.')[0]
       price = `$${price}`
-      console.log(price)
     }
     if (
       document.querySelector(
