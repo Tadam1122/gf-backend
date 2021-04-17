@@ -2,9 +2,7 @@ import express from 'express'
 import path from 'path'
 import cors from 'cors'
 import http from 'http'
-import schedule from 'node-schedule'
 import { registerRoutes } from './routes'
-import { scrapePrices } from './services/prod-services'
 
 const app = express()
 const port = process.env.PORT || 8000
@@ -34,7 +32,4 @@ app.get('*', (_, res) => {
 
 httpServer.listen(port, () => {
   console.log(`app listening on port ${port}`)
-  schedule.scheduleJob('* 2 * * *', () => {
-    scrapePrices()
-  })
 })

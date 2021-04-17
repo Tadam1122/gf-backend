@@ -10,11 +10,7 @@ var _cors = _interopRequireDefault(require("cors"));
 
 var _http = _interopRequireDefault(require("http"));
 
-var _nodeSchedule = _interopRequireDefault(require("node-schedule"));
-
 var _routes = require("./routes");
-
-var _prodServices = require("./services/prod-services");
 
 var app = (0, _express["default"])();
 var port = process.env.PORT || 8000;
@@ -36,8 +32,4 @@ app.get('*', function (_, res) {
 });
 httpServer.listen(port, function () {
   console.log("app listening on port ".concat(port));
-
-  _nodeSchedule["default"].scheduleJob('* 2 * * *', function () {
-    (0, _prodServices.scrapePrices)();
-  });
 });
