@@ -30,7 +30,9 @@ export async function scrapePrices() {
 
   console.log('updating product prices...')
 
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  })
   // const browser = await puppeteer.launch({ headless: false, devtools: true }) //debug browser
 
   const page = await browser.newPage()
