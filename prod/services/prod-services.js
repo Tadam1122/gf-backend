@@ -49,7 +49,9 @@ function _scrapePrices() {
             pedalBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
             console.log('updating product prices...');
             _context.next = 12;
-            return _puppeteer["default"].launch();
+            return _puppeteer["default"].launch({
+              args: ['--no-sandbox', '--disable-setuid-sandbox']
+            });
 
           case 12:
             browser = _context.sent;
