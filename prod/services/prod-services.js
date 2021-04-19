@@ -30,7 +30,7 @@ function scrapePrices() {
 
 function _scrapePrices() {
   _scrapePrices = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
-    var client, db, browser, page, eAmps, pages;
+    var client, db, browser, page, eGuitars, aGuitars, eAmps, aAmps, pedals, pages;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -79,34 +79,74 @@ function _scrapePrices() {
 
           case 13:
             _context.next = 15;
-            return db.collection('electric-amps').find({}).toArray();
+            return db.collection('electric-guitars').find({}).toArray();
 
           case 15:
-            eAmps = _context.sent;
-            console.log('Updating electric amplifier prices...');
+            eGuitars = _context.sent;
+            console.log('Updating electric guitar prices...');
             _context.next = 19;
-            return scrapeProducts(eAmps, 'electric-amps', page, db);
+            return scrapeProducts(eGuitars, 'electric-guitars', page, db);
 
           case 19:
             _context.next = 21;
-            return client.close();
+            return db.collection('acoustic-guitars').find({}).toArray();
 
           case 21:
-            _context.next = 23;
+            aGuitars = _context.sent;
+            console.log('Updating acoustic guitar prices...');
+            _context.next = 25;
+            return scrapeProducts(aGuitars, 'acoustic-guitars', page, db);
+
+          case 25:
+            _context.next = 27;
+            return db.collection('electric-amps').find({}).toArray();
+
+          case 27:
+            eAmps = _context.sent;
+            console.log('Updating electric amplifier prices...');
+            _context.next = 31;
+            return scrapeProducts(eAmps, 'electric-amps', page, db);
+
+          case 31:
+            _context.next = 33;
+            return db.collection('acoustic-amps').find({}).toArray();
+
+          case 33:
+            aAmps = _context.sent;
+            console.log('Updating acoustic amplifier prices...');
+            _context.next = 37;
+            return scrapeProducts(aAmps, 'acoustic-amps', page, db);
+
+          case 37:
+            _context.next = 39;
+            return db.collection('effect-pedals').find({}).toArray();
+
+          case 39:
+            pedals = _context.sent;
+            console.log('Updating effect pedal prices...');
+            _context.next = 43;
+            return scrapeProducts(pedals, 'effect-pedals', page, db);
+
+          case 43:
+            _context.next = 45;
+            return client.close();
+
+          case 45:
+            _context.next = 47;
             return browser.pages();
 
-          case 23:
+          case 47:
             pages = _context.sent;
-            _context.next = 26;
+            _context.next = 50;
             return Promise.all(pages.map(function (page) {
               return page.close();
             }));
 
-          case 26:
-            _context.next = 28;
+          case 50:
+            _context.next = 52;
             return browser.close();
 
-          case 28:
+          case 52:
           case "end":
             return _context.stop();
         }

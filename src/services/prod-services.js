@@ -40,30 +40,30 @@ export async function scrapePrices() {
   await page.setDefaultNavigationTimeout(0)
   // page.on('console', (msg) => console.log('PAGE LOG:', msg.text()))
 
-  // const eGuitars = await db.collection('electric-guitars').find({}).toArray()
+  const eGuitars = await db.collection('electric-guitars').find({}).toArray()
 
-  // console.log('Updating electric guitar prices...')
-  // await scrapeProducts(eGuitars, 'electric-guitars', page, db)
+  console.log('Updating electric guitar prices...')
+  await scrapeProducts(eGuitars, 'electric-guitars', page, db)
 
-  // const aGuitars = await db.collection('acoustic-guitars').find({}).toArray()
+  const aGuitars = await db.collection('acoustic-guitars').find({}).toArray()
 
-  // console.log('Updating acoustic guitar prices...')
-  // await scrapeProducts(aGuitars, 'acoustic-guitars', page, db)
+  console.log('Updating acoustic guitar prices...')
+  await scrapeProducts(aGuitars, 'acoustic-guitars', page, db)
 
   const eAmps = await db.collection('electric-amps').find({}).toArray()
 
   console.log('Updating electric amplifier prices...')
   await scrapeProducts(eAmps, 'electric-amps', page, db)
 
-  // const aAmps = await db.collection('acoustic-amps').find({}).toArray()
+  const aAmps = await db.collection('acoustic-amps').find({}).toArray()
 
-  // console.log('Updating acoustic amplifier prices...')
-  // await scrapeProducts(aAmps, 'acoustic-amps', page, db)
+  console.log('Updating acoustic amplifier prices...')
+  await scrapeProducts(aAmps, 'acoustic-amps', page, db)
 
-  // const pedals = await db.collection('effect-pedals').find({}).toArray()
+  const pedals = await db.collection('effect-pedals').find({}).toArray()
 
-  // console.log('Updating effect pedal prices...')
-  // await scrapeProducts(pedals, 'effect-pedals', page, db)
+  console.log('Updating effect pedal prices...')
+  await scrapeProducts(pedals, 'effect-pedals', page, db)
 
   await client.close()
 
