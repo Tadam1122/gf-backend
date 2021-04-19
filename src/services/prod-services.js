@@ -36,9 +36,6 @@ export async function scrapePrices() {
   // const browser = await puppeteer.launch({ headless: false, devtools: true }) //debug browser
 
   const page = await browser.newPage()
-  await page.setUserAgent(
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
-  )
 
   await page.setDefaultNavigationTimeout(0)
   // page.on('console', (msg) => console.log('PAGE LOG:', msg.text()))
