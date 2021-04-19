@@ -30,7 +30,7 @@ function scrapePrices() {
 
 function _scrapePrices() {
   _scrapePrices = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
-    var client, db, browser, page, eAmps;
+    var client, db, browser, page, eAmps, pages;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -89,13 +89,24 @@ function _scrapePrices() {
 
           case 19:
             _context.next = 21;
-            return browser.close();
+            return client.close();
 
           case 21:
             _context.next = 23;
-            return client.close();
+            return browser.pages();
 
           case 23:
+            pages = _context.sent;
+            _context.next = 26;
+            return Promise.resolve(pages.map(function (page) {
+              return page.close();
+            }));
+
+          case 26:
+            _context.next = 28;
+            return browser.close();
+
+          case 28:
           case "end":
             return _context.stop();
         }

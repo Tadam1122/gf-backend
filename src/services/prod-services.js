@@ -65,8 +65,11 @@ export async function scrapePrices() {
   // console.log('Updating effect pedal prices...')
   // await scrapeProducts(pedals, 'effect-pedals', page, db)
 
-  await browser.close()
   await client.close()
+
+  let pages = await browser.pages()
+  await Promise.resolve(pages.map((page) => page.close()))
+  await browser.close()
 }
 
 async function scrapeProducts(products, tableName, page, db) {
