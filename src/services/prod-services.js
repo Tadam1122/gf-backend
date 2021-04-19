@@ -68,7 +68,7 @@ export async function scrapePrices() {
   await client.close()
 
   let pages = await browser.pages()
-  await Promise.resolve(pages.map((page) => page.close()))
+  await Promise.all(pages.map((page) => page.close()))
   await browser.close()
 }
 

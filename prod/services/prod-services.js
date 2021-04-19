@@ -98,7 +98,7 @@ function _scrapePrices() {
           case 23:
             pages = _context.sent;
             _context.next = 26;
-            return Promise.resolve(pages.map(function (page) {
+            return Promise.all(pages.map(function (page) {
               return page.close();
             }));
 
