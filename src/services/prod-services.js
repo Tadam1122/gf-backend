@@ -66,6 +66,7 @@ export async function scrapePrices() {
   // await scrapeProducts(pedals, 'effect-pedals', page, db)
 
   await browser.close()
+  await client.close()
 }
 
 async function scrapeProducts(products, tableName, page, db) {

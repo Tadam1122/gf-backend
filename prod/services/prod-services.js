@@ -92,6 +92,10 @@ function _scrapePrices() {
             return browser.close();
 
           case 21:
+            _context.next = 23;
+            return client.close();
+
+          case 23:
           case "end":
             return _context.stop();
         }
