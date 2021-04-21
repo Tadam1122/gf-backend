@@ -23,14 +23,15 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-// const cliProgress = require('cli-progress')
+var cliProgress = require('cli-progress');
+
 function scrapePrices() {
   return _scrapePrices.apply(this, arguments);
 }
 
 function _scrapePrices() {
   _scrapePrices = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
-    var client, db, browser, page, eGuitars, aGuitars, eAmps, aAmps, pedals, pages;
+    var client, db, eGuitarBar, aGuitarBar, aAmpBar, eAmpBar, pedalBar, browser, page, eAmps, aAmps, pedals, aGuitars, eGuitars, pages;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -40,113 +41,95 @@ function _scrapePrices() {
 
           case 2:
             client = _context.sent;
-            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder'); // const eGuitarBar = new cliProgress.SingleBar(
-            //   {},
-            //   cliProgress.Presets.shades_classic
-            // )
-            // const aGuitarBar = new cliProgress.SingleBar(
-            //   {},
-            //   cliProgress.Presets.shades_classic
-            // )
-            // const aAmpBar = new cliProgress.SingleBar(
-            //   {},
-            //   cliProgress.Presets.shades_classic
-            // )
-            // const eAmpBar = new cliProgress.SingleBar(
-            //   {},
-            //   cliProgress.Presets.shades_classic
-            // )
-            // const pedalBar = new cliProgress.SingleBar(
-            //   {},
-            //   cliProgress.Presets.shades_classic
-            // )
-
+            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder');
+            eGuitarBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+            aGuitarBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+            aAmpBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+            eAmpBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+            pedalBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
             console.log('updating product prices...');
-            _context.next = 7;
+            _context.next = 12;
             return _puppeteer["default"].launch({
               args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
 
-          case 7:
+          case 12:
             browser = _context.sent;
-            _context.next = 10;
+            _context.next = 15;
             return browser.newPage();
 
-          case 10:
-            page = _context.sent;
-            _context.next = 13;
-            return page.setDefaultNavigationTimeout(0);
-
-          case 13:
-            _context.next = 15;
-            return db.collection('electric-guitars').find({}).toArray();
-
           case 15:
-            eGuitars = _context.sent;
-            console.log('Updating electric guitar prices...');
+            page = _context.sent;
+            page.setDefaultNavigationTimeout(0);
             _context.next = 19;
-            return scrapeProducts(eGuitars, 'electric-guitars', page, db);
-
-          case 19:
-            _context.next = 21;
-            return db.collection('acoustic-guitars').find({}).toArray();
-
-          case 21:
-            aGuitars = _context.sent;
-            console.log('Updating acoustic guitar prices...');
-            _context.next = 25;
-            return scrapeProducts(aGuitars, 'acoustic-guitars', page, db);
-
-          case 25:
-            _context.next = 27;
             return db.collection('electric-amps').find({}).toArray();
 
-          case 27:
+          case 19:
             eAmps = _context.sent;
             console.log('Updating electric amplifier prices...');
-            _context.next = 31;
-            return scrapeProducts(eAmps, 'electric-amps', page, db);
+            _context.next = 23;
+            return scrapeProducts(eAmps, 'electric-amps', page, db, eAmpBar);
 
-          case 31:
-            _context.next = 33;
+          case 23:
+            _context.next = 25;
             return db.collection('acoustic-amps').find({}).toArray();
 
-          case 33:
+          case 25:
             aAmps = _context.sent;
             console.log('Updating acoustic amplifier prices...');
-            _context.next = 37;
-            return scrapeProducts(aAmps, 'acoustic-amps', page, db);
+            _context.next = 29;
+            return scrapeProducts(aAmps, 'acoustic-amps', page, db, aAmpBar);
 
-          case 37:
-            _context.next = 39;
+          case 29:
+            _context.next = 31;
             return db.collection('effect-pedals').find({}).toArray();
 
-          case 39:
+          case 31:
             pedals = _context.sent;
             console.log('Updating effect pedal prices...');
+            _context.next = 35;
+            return scrapeProducts(pedals, 'effect-pedals', page, db, pedalBar);
+
+          case 35:
+            _context.next = 37;
+            return db.collection('acoustic-guitars').find({}).toArray();
+
+          case 37:
+            aGuitars = _context.sent;
+            console.log('Updating acoustic guitar prices...');
+            _context.next = 41;
+            return scrapeProducts(aGuitars, 'acoustic-guitars', page, db, aGuitarBar);
+
+          case 41:
             _context.next = 43;
-            return scrapeProducts(pedals, 'effect-pedals', page, db);
+            return db.collection('electric-guitars').find({}).toArray();
 
           case 43:
-            _context.next = 45;
-            return client.close();
-
-          case 45:
+            eGuitars = _context.sent;
+            console.log('Updating electric guitar prices...');
             _context.next = 47;
-            return browser.pages();
+            return scrapeProducts(eGuitars, 'electric-guitars', page, db, eGuitarBar);
 
           case 47:
+            _context.next = 49;
+            return client.close();
+
+          case 49:
+            _context.next = 51;
+            return browser.pages();
+
+          case 51:
             pages = _context.sent;
-            _context.next = 50;
+            _context.next = 54;
             return Promise.all(pages.map(function (page) {
               return page.close();
             }));
 
-          case 50:
-            _context.next = 52;
+          case 54:
+            _context.next = 56;
             return browser.close();
 
-          case 52:
+          case 56:
           case "end":
             return _context.stop();
         }
@@ -156,23 +139,24 @@ function _scrapePrices() {
   return _scrapePrices.apply(this, arguments);
 }
 
-function scrapeProducts(_x, _x2, _x3, _x4) {
+function scrapeProducts(_x, _x2, _x3, _x4, _x5) {
   return _scrapeProducts.apply(this, arguments);
 }
 
 function _scrapeProducts() {
-  _scrapeProducts = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(products, tableName, page, db) {
+  _scrapeProducts = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(products, tableName, page, db, productBar) {
     var i, product, productId, inStock, j, price, data, _data, _data2;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
+            productBar.start(products.length, 0);
             i = 0;
 
-          case 1:
+          case 2:
             if (!(i < products.length)) {
-              _context2.next = 42;
+              _context2.next = 44;
               break;
             }
 
@@ -182,91 +166,97 @@ function _scrapeProducts() {
             inStock = false;
             j = 0;
 
-          case 7:
+          case 8:
             if (!(j < product.prices.length)) {
-              _context2.next = 36;
+              _context2.next = 37;
               break;
             }
 
             price = void 0;
 
             if (!(product.prices[j].website === 'American Musical Supply')) {
-              _context2.next = 16;
+              _context2.next = 17;
               break;
             }
 
-            _context2.next = 12;
+            _context2.next = 13;
             return require("../../prod/services/scrape-services")["priceAMS"](product.prices[j].url, page);
 
-          case 12:
+          case 13:
             data = _context2.sent;
             product.prices[j].inStock = data.inStock;
             price = data.price;
             inStock = inStock ? inStock : data.inStock;
 
-          case 16:
+          case 17:
             if (!(product.prices[j].website === 'Sweetwater')) {
-              _context2.next = 24;
+              _context2.next = 25;
               break;
             }
 
             if (!product.prices[j].url) {
-              _context2.next = 24;
+              _context2.next = 25;
               break;
             }
 
-            _context2.next = 20;
+            _context2.next = 21;
             return require("../../prod/services/scrape-services")["priceSweetwater"](product.prices[j].url, page);
 
-          case 20:
+          case 21:
             _data = _context2.sent;
             product.prices[j].inStock = _data.inStock;
             price = _data.price;
             inStock = inStock ? inStock : _data.inStock;
 
-          case 24:
+          case 25:
             if (!(product.prices[j].website === 'Musicians Friend')) {
-              _context2.next = 32;
+              _context2.next = 33;
               break;
             }
 
             if (!product.prices[j].url) {
-              _context2.next = 32;
+              _context2.next = 33;
               break;
             }
 
-            _context2.next = 28;
+            _context2.next = 29;
             return require("../../prod/services/scrape-services")["priceMF"](product.prices[j].url, page);
 
-          case 28:
+          case 29:
             _data2 = _context2.sent;
             product.prices[j].inStock = _data2.inStock;
             price = _data2.price;
             inStock = inStock ? inStock : _data2.inStock;
 
-          case 32:
+          case 33:
             if (price) product.prices[j].price = price;
 
-          case 33:
+          case 34:
             j++;
-            _context2.next = 7;
+            _context2.next = 8;
             break;
 
-          case 36:
+          case 37:
             product.inStock = inStock;
-            _context2.next = 39;
+            _context2.next = 40;
             return db.collection(tableName).updateOne({
               _id: (0, _mongodb.ObjectId)(productId)
             }, {
               $set: product
             });
 
-          case 39:
+          case 40:
+            productBar.increment();
+
+          case 41:
             i++;
-            _context2.next = 1;
+            _context2.next = 2;
             break;
 
-          case 42:
+          case 44:
+            productBar.stop();
+
+          case 45:
           case "end":
             return _context2.stop();
         }
