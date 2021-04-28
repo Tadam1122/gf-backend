@@ -6,13 +6,11 @@ import jwt from 'jsonwebtoken'
 import { createTransport } from 'nodemailer'
 
 export async function verify(req, res) {
-  // TODO: replace secret with env var
-  const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf'
   try {
-    const results = jwt.verify(req.params.token, EMAIL_SECRET)
+    const results = jwt.verify(req.params.token, process.env.EMAIL_SECRET)
     const client = await connectClient()
     const db = client.db(process.env.MONGO_DBNAME || 'guitar-finder')
-    const updatedUser = await db
+    await db
       .collection('users')
       .findOneAndUpdate(
         { _id: ObjectId(results.user._id) },
@@ -43,24 +41,22 @@ export async function resend(req, res) {
       port: 465,
       host: 'smtp.gmail.com',
       auth: {
-        user: 'guitarfinderapp@gmail.com',
-        pass: 'GuitarFinder1122!',
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
       secure: true,
     })
-
-    const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf'
 
     jwt.sign(
       {
         user: { _id: results._id },
       },
-      EMAIL_SECRET,
+      process.env.EMAIL_SECRET,
       {
         expiresIn: '1d',
       },
       (err, token) => {
-        const url = process.env.GMAIL_USER
+        const url = process.env.EMAIL_USER
           ? `https://guitar-finder.net/api/confirm/${token}`
           : `http://localhost:8000/api/confirm/${token}`
 

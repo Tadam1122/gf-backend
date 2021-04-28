@@ -26,7 +26,7 @@ function create(_x, _x2) {
 
 function _create() {
   _create = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-    var validation, user, client, db, userCheck, emailCheck, result, transporter, EMAIL_SECRET;
+    var validation, user, client, db, userCheck, emailCheck, result, transporter;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -108,25 +108,22 @@ function _create() {
           case 26:
             result = _context.sent;
             client.close(); // transporter to send user confirmation email
-            // TODO: remove hard coded credentials before commit
 
             transporter = (0, _nodemailer.createTransport)({
               port: 465,
               host: 'smtp.gmail.com',
               auth: {
-                user: 'guitarfinderapp@gmail.com',
-                pass: 'GuitarFinder1122!'
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
               },
               secure: true
-            }); // TODO: remove hard coded secret
-
-            EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf'; //asynchronous email sign in
+            }); //asynchronous email sign in
 
             _jsonwebtoken["default"].sign({
               user: {
                 _id: result.insertedId
               }
-            }, EMAIL_SECRET, {
+            }, process.env.EMAIL_SECRET, {
               expiresIn: '1d'
             }, function (err, token) {
               var url = process.env.GMAIL_USER ? "https://guitar-finder.net/api/confirm/".concat(token) : "http://localhost:8000/api/confirm/".concat(token);
@@ -139,7 +136,7 @@ function _create() {
 
             return _context.abrupt("return", res.status(200).json(user));
 
-          case 32:
+          case 31:
           case "end":
             return _context.stop();
         }

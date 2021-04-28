@@ -47,26 +47,22 @@ export async function create(req, res) {
   client.close()
 
   // transporter to send user confirmation email
-  // TODO: remove hard coded credentials before commit
   const transporter = createTransport({
     port: 465,
     host: 'smtp.gmail.com',
     auth: {
-      user: 'guitarfinderapp@gmail.com',
-      pass: 'GuitarFinder1122!',
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
     secure: true,
   })
-
-  // TODO: remove hard coded secret
-  const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf'
 
   //asynchronous email sign in
   jwt.sign(
     {
       user: { _id: result.insertedId },
     },
-    EMAIL_SECRET,
+    process.env.EMAIL_SECRET,
     {
       expiresIn: '1d',
     },

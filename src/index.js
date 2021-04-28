@@ -15,25 +15,21 @@ app.use(
   })
 )
 
-// app.use(
-//   express.static(path.resolve(__dirname, '../dist'), {
-//     maxAge: '62d',
-//     etag: false,
-//   })
-// )
+app.use(
+  express.static(path.resolve(__dirname, '../dist'), {
+    maxAge: '62d',
+    etag: false,
+  })
+)
 
 registerRoutes(app)
 
-// const httpServer = http.createServer(app)
+const httpServer = http.createServer(app)
 
-// app.get('*', (_, res) => {
-//   res.sendFile(path.join(__dirname, '../dist/index.html'))
-// })
+app.get('*', (_, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'))
+})
 
-// httpServer.listen(port, () => {
-//   console.log(`app listening on port ${port}`)
-// })
-
-app.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(`app listening on port ${port}`)
 })

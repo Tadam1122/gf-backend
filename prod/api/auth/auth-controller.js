@@ -31,22 +31,20 @@ function verify(_x, _x2) {
 
 function _verify() {
   _verify = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-    var EMAIL_SECRET, results, client, db, updatedUser;
+    var results, client, db;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            // TODO: replace secret with env var
-            EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf';
-            _context.prev = 1;
-            results = _jsonwebtoken["default"].verify(req.params.token, EMAIL_SECRET);
-            _context.next = 5;
+            _context.prev = 0;
+            results = _jsonwebtoken["default"].verify(req.params.token, process.env.EMAIL_SECRET);
+            _context.next = 4;
             return (0, _connect.connectClient)();
 
-          case 5:
+          case 4:
             client = _context.sent;
             db = client.db(process.env.MONGO_DBNAME || 'guitar-finder');
-            _context.next = 9;
+            _context.next = 8;
             return db.collection('users').findOneAndUpdate({
               _id: (0, _mongodb.ObjectId)(results.user._id)
             }, {
@@ -57,26 +55,25 @@ function _verify() {
               returnOriginal: false
             });
 
-          case 9:
-            updatedUser = _context.sent;
+          case 8:
             client.close();
-            _context.next = 16;
+            _context.next = 14;
             break;
 
-          case 13:
-            _context.prev = 13;
-            _context.t0 = _context["catch"](1);
+          case 11:
+            _context.prev = 11;
+            _context.t0 = _context["catch"](0);
             return _context.abrupt("return", res.send('Error validating user'));
 
-          case 16:
+          case 14:
             return _context.abrupt("return", res.redirect(process.env.EMAIL_SECRET ? 'https://guitar-finder.net/login' : 'http://localhost:3000/login'));
 
-          case 17:
+          case 15:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[1, 13]]);
+    }, _callee, null, [[0, 11]]);
   }));
   return _verify.apply(this, arguments);
 }
@@ -87,7 +84,7 @@ function resend(_x3, _x4) {
 
 function _resend() {
   _resend = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res) {
-    var client, db, results, transporter, EMAIL_SECRET;
+    var client, db, results, transporter;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -108,7 +105,7 @@ function _resend() {
             client.close();
 
             if (!results) {
-              _context2.next = 15;
+              _context2.next = 14;
               break;
             }
 
@@ -116,21 +113,20 @@ function _resend() {
               port: 465,
               host: 'smtp.gmail.com',
               auth: {
-                user: 'guitarfinderapp@gmail.com',
-                pass: 'GuitarFinder1122!'
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
               },
               secure: true
             });
-            EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf';
 
             _jsonwebtoken["default"].sign({
               user: {
                 _id: results._id
               }
-            }, EMAIL_SECRET, {
+            }, process.env.EMAIL_SECRET, {
               expiresIn: '1d'
             }, function (err, token) {
-              var url = process.env.GMAIL_USER ? "https://guitar-finder.net/api/confirm/".concat(token) : "http://localhost:8000/api/confirm/".concat(token);
+              var url = process.env.EMAIL_USER ? "https://guitar-finder.net/api/confirm/".concat(token) : "http://localhost:8000/api/confirm/".concat(token);
               transporter.sendMail({
                 to: req.body.email,
                 subject: 'Confirm Email',
@@ -140,12 +136,12 @@ function _resend() {
 
             return _context2.abrupt("return", res.status(200).json(results));
 
-          case 15:
+          case 14:
             return _context2.abrupt("return", res.status(400).json({
               message: "No account found with email '".concat(req.body.email, "'.")
             }));
 
-          case 16:
+          case 15:
           case "end":
             return _context2.stop();
         }

@@ -18,21 +18,18 @@ app.use((0, _cors["default"])());
 app.use(_express["default"].json());
 app.use(_express["default"].urlencoded({
   extended: true
-})); // app.use(
-//   express.static(path.resolve(__dirname, '../dist'), {
-//     maxAge: '62d',
-//     etag: false,
-//   })
-// )
+}));
+app.use(_express["default"]["static"](_path["default"].resolve(__dirname, '../dist'), {
+  maxAge: '62d',
+  etag: false
+}));
+(0, _routes.registerRoutes)(app);
 
-(0, _routes.registerRoutes)(app); // const httpServer = http.createServer(app)
-// app.get('*', (_, res) => {
-//   res.sendFile(path.join(__dirname, '../dist/index.html'))
-// })
-// httpServer.listen(port, () => {
-//   console.log(`app listening on port ${port}`)
-// })
+var httpServer = _http["default"].createServer(app);
 
-app.listen(port, function () {
+app.get('*', function (_, res) {
+  res.sendFile(_path["default"].join(__dirname, '../dist/index.html'));
+});
+httpServer.listen(port, function () {
   console.log("app listening on port ".concat(port));
 });
