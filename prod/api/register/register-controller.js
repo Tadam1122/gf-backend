@@ -130,7 +130,7 @@ function _create() {
               transporter.sendMail({
                 to: user.email,
                 subject: 'Confirm Email',
-                html: "Please click <a href=\"".concat(url, "\">here</a> to confirm your email for your new account.")
+                html: "Hi ".concat(user.username, " <br/> Please click <a href=\"").concat(url, "\">here</a> to confirm your email for your new account.")
               });
             });
 

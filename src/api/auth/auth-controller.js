@@ -63,7 +63,7 @@ export async function resend(req, res) {
         transporter.sendMail({
           to: req.body.email,
           subject: 'Confirm Email',
-          html: `Please click <a href="${url}">here</a> to confirm your email for your new account.`,
+          html: `Hi ${results.username} <br/> Please click <a href="${url}">here</a> to confirm your email for your new account.`,
         })
       }
     )

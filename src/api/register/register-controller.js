@@ -74,7 +74,7 @@ export async function create(req, res) {
       transporter.sendMail({
         to: user.email,
         subject: 'Confirm Email',
-        html: `Please click <a href="${url}">here</a> to confirm your email for your new account.`,
+        html: `Hi ${user.username} <br/> Please click <a href="${url}">here</a> to confirm your email for your new account.`,
       })
     }
   )

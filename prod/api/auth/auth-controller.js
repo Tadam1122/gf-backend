@@ -130,7 +130,7 @@ function _resend() {
               transporter.sendMail({
                 to: req.body.email,
                 subject: 'Confirm Email',
-                html: "Please click <a href=\"".concat(url, "\">here</a> to confirm your email for your new account.")
+                html: "Hi ".concat(results.username, " <br/> Please click <a href=\"").concat(url, "\">here</a> to confirm your email for your new account.")
               });
             });
 
