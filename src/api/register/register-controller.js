@@ -1,5 +1,7 @@
 import { connectClient } from '../../db/connect'
 import argon2 from 'argon2'
+import { createTransport } from 'nodemailer'
+import jwt from 'jsonwebtoken'
 
 //create user
 export async function create(req, res) {
@@ -15,6 +17,7 @@ export async function create(req, res) {
     password: await argon2.hash(req.body.password),
     email: req.body.email.toLowerCase(),
     wishlists: [],
+    verified: false,
   }
 
   //connect to database
@@ -39,9 +42,46 @@ export async function create(req, res) {
       .json({ message: `Email '${req.body.email}' already taken./` })
   }
 
-  //add new user
-  await db.collection('users').insertOne(user)
+  //add new user and get id
+  const result = await db.collection('users').insertOne(user)
   client.close()
+
+  // transporter to send user confirmation email
+  // TODO: remove hard coded credentials before commit
+  const transporter = createTransport({
+    port: 465,
+    host: 'smtp.gmail.com',
+    auth: {
+      user: 'guitarfinderapp@gmail.com',
+      pass: 'GuitarFinder1122!',
+    },
+    secure: true,
+  })
+
+  // TODO: remove hard coded secret
+  const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf'
+
+  //asynchronous email sign in
+  jwt.sign(
+    {
+      user: { _id: result.insertedId },
+    },
+    EMAIL_SECRET,
+    {
+      expiresIn: '1d',
+    },
+    (err, token) => {
+      const url = process.env.GMAIL_USER
+        ? `https://guitar-finder.net/api/confirm/${token}`
+        : `http://localhost:8000/api/confirm/${token}`
+
+      transporter.sendMail({
+        to: user.email,
+        subject: 'Confirm Email',
+        html: `Please click <a href="${url}">here</a> to confirm your email for your new account.`,
+      })
+    }
+  )
   return res.status(200).json(user)
 }
 

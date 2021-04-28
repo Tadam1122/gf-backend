@@ -16,5 +16,7 @@ var controller = _interopRequireWildcard(require("./auth-controller"));
 var router = _express["default"].Router();
 
 router.post('/auth', controller.index);
+router.get('/confirm/:token', controller.verify);
+router.post('/confirm', controller.resend);
 var _default = router;
 exports["default"] = _default;
