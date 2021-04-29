@@ -12,13 +12,17 @@ var _puppeteer = _interopRequireDefault(require("puppeteer"));
 
 var _mongodb = require("mongodb");
 
+var _cliProgress = _interopRequireDefault(require("cli-progress"));
+
 var _connect = require("../../prod/db/connect");
+
+var _priceUtil = require("../utilities/priceUtil");
+
+var _wishlistService = require("./wishlistService");
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-var cliProgress = require('cli-progress');
 
 function scrapePrices() {
   return _scrapePrices.apply(this, arguments);
@@ -37,7 +41,7 @@ function _scrapePrices() {
           case 2:
             client = _context.sent;
             db = client.db(process.env.MONGO_DBNAME || 'guitar-finder');
-            eAmpBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+            eAmpBar = new _cliProgress["default"].SingleBar({}, _cliProgress["default"].Presets.shades_classic);
             console.log('updating product prices...');
             _context.next = 8;
             return _puppeteer["default"].launch({
@@ -97,7 +101,7 @@ function scrapeProducts(_x, _x2, _x3, _x4, _x5) {
 
 function _scrapeProducts() {
   _scrapeProducts = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(products, tableName, page, db, productBar) {
-    var i, product, productId, inStock, j, price, data, _data, _data2;
+    var i, product, productId, inStock, j, price, data, _data, _data2, priceNum, lowestPrices, priceDiff;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
@@ -181,7 +185,18 @@ function _scrapeProducts() {
             inStock = inStock ? inStock : _data2.inStock;
 
           case 33:
-            if (price) product.prices[j].price = price;
+            if (price) {
+              //update new product price
+              product.prices[j].price = price; //update wishlists with products
+
+              priceNum = (0, _priceUtil.priceToNumber)(price);
+              lowestPrices = (0, _priceUtil.getLowestNumber)(product.prices);
+
+              if (priceNum < lowestPrices) {
+                priceDiff = lowestPrices - priceNum;
+                (0, _wishlistService.updateWishlists)(db, priceDiff, productId);
+              }
+            }
 
           case 34:
             j++;

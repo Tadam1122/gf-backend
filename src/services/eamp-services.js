@@ -1,7 +1,9 @@
 import puppeteer from 'puppeteer'
 import { ObjectId } from 'mongodb'
+import cliProgress from 'cli-progress'
 import { connectClient } from '../../prod/db/connect'
-const cliProgress = require('cli-progress')
+import { getLowestNumber, priceToNumber } from '../utilities/priceUtil'
+import { updateWishlists } from './wishlistService'
 
 async function scrapePrices() {
   const client = await connectClient()
@@ -76,7 +78,18 @@ async function scrapeProducts(products, tableName, page, db, productBar) {
           inStock = inStock ? inStock : data.inStock
         }
       }
-      if (price) product.prices[j].price = price
+      if (price) {
+        //update new product price
+        product.prices[j].price = price
+
+        //update wishlists with products
+        let priceNum = priceToNumber(price)
+        let lowestPrices = getLowestNumber(product.prices)
+        if (priceNum < lowestPrices) {
+          let priceDiff = lowestPrices - priceNum
+          updateWishlists(db, priceDiff, productId)
+        }
+      }
     }
     product.inStock = inStock
     await db
