@@ -66,7 +66,7 @@ function _verify() {
             return _context.abrupt("return", res.send('Error validating user'));
 
           case 14:
-            return _context.abrupt("return", res.redirect(process.env.EMAIL_SECRET ? 'https://guitar-finder.net/login' : 'http://localhost:3000/login'));
+            return _context.abrupt("return", res.redirect('https://guitar-finder.net/login'));
 
           case 15:
           case "end":
@@ -126,7 +126,7 @@ function _resend() {
             }, process.env.EMAIL_SECRET, {
               expiresIn: '1d'
             }, function (err, token) {
-              var url = process.env.EMAIL_USER ? "https://guitar-finder.net/api/confirm/".concat(token) : "http://localhost:8000/api/confirm/".concat(token);
+              var url = "https://guitar-finder.net/api/confirm/".concat(token);
               transporter.sendMail({
                 to: req.body.email,
                 subject: 'Confirm Email',

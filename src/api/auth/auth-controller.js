@@ -21,11 +21,7 @@ export async function verify(req, res) {
   } catch {
     return res.send('Error validating user')
   }
-  return res.redirect(
-    process.env.EMAIL_SECRET
-      ? 'https://guitar-finder.net/login'
-      : 'http://localhost:3000/login'
-  )
+  return res.redirect('https://guitar-finder.net/login')
 }
 
 export async function resend(req, res) {
@@ -56,9 +52,7 @@ export async function resend(req, res) {
         expiresIn: '1d',
       },
       (err, token) => {
-        const url = process.env.EMAIL_USER
-          ? `https://guitar-finder.net/api/confirm/${token}`
-          : `http://localhost:8000/api/confirm/${token}`
+        const url = `https://guitar-finder.net/api/confirm/${token}`
 
         transporter.sendMail({
           to: req.body.email,
