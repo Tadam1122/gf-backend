@@ -67,9 +67,7 @@ export async function create(req, res) {
       expiresIn: '1d',
     },
     (err, token) => {
-      const url = process.env.GMAIL_USER
-        ? `https://guitar-finder.net/api/confirm/${token}`
-        : `http://localhost:8000/api/confirm/${token}`
+      const url = `https://guitar-finder.net/api/confirm/${token}`
 
       transporter.sendMail({
         to: user.email,
