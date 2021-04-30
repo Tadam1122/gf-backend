@@ -126,7 +126,7 @@ function _create() {
             }, process.env.EMAIL_SECRET, {
               expiresIn: '1d'
             }, function (err, token) {
-              var url = "https://guitar-finder.net/api/confirm/".concat(token);
+              var url = "https://guitar-finder.net/api/auth/".concat(token);
               transporter.sendMail({
                 to: user.email,
                 subject: 'Confirm Email',
