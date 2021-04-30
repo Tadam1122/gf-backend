@@ -35,20 +35,3 @@ export async function show(req, res) {
     return res.status(200).json(eGutiar)
   }
 }
-
-export async function update(req, res) {
-  const eGuitar = req.body
-  const eGuitarId = req.body.id
-
-  console.log(`updating electric guitar with id ${eGuitarId}`)
-
-  const client = await connectClient()
-  const db = client.db(process.env.MONGO_DBNAME || 'guitar-finder')
-
-  //update electric guitar
-  await db
-    .collection('electric-guitars')
-    .updateOne({ _id: ObjectId(eGuitarId) }, { $set: eGuitar })
-  client.close()
-  return res.status(200).json(eGuitar)
-}

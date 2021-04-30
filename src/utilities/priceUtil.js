@@ -1,3 +1,4 @@
+//find lowest price from stores
 export function getLowestPrice(stores) {
   let nonEmpty = stores.filter((store) => store.price.length > 0)
   return `$${Math.min(
@@ -7,6 +8,7 @@ export function getLowestPrice(stores) {
   )}`
 }
 
+//find lowest number from stores of prices
 export function getLowestNumber(stores) {
   let nonEmpty = stores.filter((store) => store.price.length > 0)
   return Math.min(
@@ -16,6 +18,7 @@ export function getLowestNumber(stores) {
   )
 }
 
+//convert price to a number
 export function priceToNumber(price) {
   return Number(price.split('$')[1])
 }

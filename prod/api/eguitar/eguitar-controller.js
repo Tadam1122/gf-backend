@@ -7,7 +7,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.index = index;
 exports.show = show;
-exports.update = update;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -103,46 +102,4 @@ function _show() {
     }, _callee2);
   }));
   return _show.apply(this, arguments);
-}
-
-function update(_x5, _x6) {
-  return _update.apply(this, arguments);
-}
-
-function _update() {
-  _update = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(req, res) {
-    var eGuitar, eGuitarId, client, db;
-    return _regenerator["default"].wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            eGuitar = req.body;
-            eGuitarId = req.body.id;
-            console.log("updating electric guitar with id ".concat(eGuitarId));
-            _context3.next = 5;
-            return (0, _connect.connectClient)();
-
-          case 5:
-            client = _context3.sent;
-            db = client.db(process.env.MONGO_DBNAME || 'guitar-finder'); //update electric guitar
-
-            _context3.next = 9;
-            return db.collection('electric-guitars').updateOne({
-              _id: (0, _mongodb.ObjectId)(eGuitarId)
-            }, {
-              $set: eGuitar
-            });
-
-          case 9:
-            client.close();
-            return _context3.abrupt("return", res.status(200).json(eGuitar));
-
-          case 11:
-          case "end":
-            return _context3.stop();
-        }
-      }
-    }, _callee3);
-  }));
-  return _update.apply(this, arguments);
 }

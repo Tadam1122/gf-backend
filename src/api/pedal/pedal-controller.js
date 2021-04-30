@@ -33,20 +33,3 @@ export async function show(req, res) {
     return res.status(200).json(pedal)
   }
 }
-
-export async function update(req, res) {
-  const pedal = req.body
-  const pedalId = req.body.id
-
-  console.log(`updating effect pedal with id ${pedalId}`)
-
-  const client = await connectClient()
-  const db = client.db(process.env.MONGO_DBNAME || 'guitar-finder')
-
-  //update pedals
-  await db
-    .collection('effect-pedals')
-    .updateOne({ _id: ObjectId(pedalId) }, { $set: pedal })
-  client.close()
-  return res.status(200).json(pedal)
-}
