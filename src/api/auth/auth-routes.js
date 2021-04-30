@@ -4,8 +4,8 @@ import * as controller from './auth-controller'
 
 router.post('/auth', controller.index)
 
-router.get('/confirm/:token', controller.verify)
+router.get('/auth/:token', controller.verify)
 
-router.post('/confirm', controller.resend)
+router.put('/auth', controller.resend)
 
 export default router
