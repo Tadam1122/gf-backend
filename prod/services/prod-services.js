@@ -17,21 +17,25 @@ var _puppeteer = _interopRequireDefault(require("puppeteer"));
 
 var _mongodb = require("mongodb");
 
+var _cliProgress = _interopRequireDefault(require("cli-progress"));
+
 var _connect = require("../db/connect");
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+var _priceUtil = require("../utilities/priceUtil");
+
+var _wishlistService = require("./wishlistService");
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-var cliProgress = require('cli-progress');
-
-function scrapePrices() {
+function scrapePrices(_x) {
   return _scrapePrices.apply(this, arguments);
 }
 
 function _scrapePrices() {
-  _scrapePrices = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
-    var client, db, eGuitarBar, aGuitarBar, aAmpBar, eAmpBar, pedalBar, browser, page, eAmps, aAmps, pedals, aGuitars, eGuitars, pages;
+  _scrapePrices = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(table) {
+    var client, db, bar, browser, page, data, pages;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -42,94 +46,51 @@ function _scrapePrices() {
           case 2:
             client = _context.sent;
             db = client.db(process.env.MONGO_DBNAME || 'guitar-finder');
-            eGuitarBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-            aGuitarBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-            aAmpBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-            eAmpBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-            pedalBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+            bar = new _cliProgress["default"].SingleBar({}, _cliProgress["default"].Presets.shades_classic);
             console.log('updating product prices...');
-            _context.next = 12;
+            _context.next = 8;
             return _puppeteer["default"].launch({
               args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
 
-          case 12:
+          case 8:
             browser = _context.sent;
-            _context.next = 15;
+            _context.next = 11;
             return browser.newPage();
 
-          case 15:
+          case 11:
             page = _context.sent;
             page.setDefaultNavigationTimeout(0);
+            _context.next = 15;
+            return db.collection(table).find({}).toArray();
+
+          case 15:
+            data = _context.sent;
+            console.log("Updating ".concat(table, " prices..."));
             _context.next = 19;
-            return db.collection('electric-amps').find({}).toArray();
+            return scrapeProducts(data, table, page, db, bar);
 
           case 19:
-            eAmps = _context.sent;
-            console.log('Updating electric amplifier prices...');
-            _context.next = 23;
-            return scrapeProducts(eAmps, 'electric-amps', page, db, eAmpBar);
-
-          case 23:
-            _context.next = 25;
-            return db.collection('acoustic-amps').find({}).toArray();
-
-          case 25:
-            aAmps = _context.sent;
-            console.log('Updating acoustic amplifier prices...');
-            _context.next = 29;
-            return scrapeProducts(aAmps, 'acoustic-amps', page, db, aAmpBar);
-
-          case 29:
-            _context.next = 31;
-            return db.collection('effect-pedals').find({}).toArray();
-
-          case 31:
-            pedals = _context.sent;
-            console.log('Updating effect pedal prices...');
-            _context.next = 35;
-            return scrapeProducts(pedals, 'effect-pedals', page, db, pedalBar);
-
-          case 35:
-            _context.next = 37;
-            return db.collection('acoustic-guitars').find({}).toArray();
-
-          case 37:
-            aGuitars = _context.sent;
-            console.log('Updating acoustic guitar prices...');
-            _context.next = 41;
-            return scrapeProducts(aGuitars, 'acoustic-guitars', page, db, aGuitarBar);
-
-          case 41:
-            _context.next = 43;
-            return db.collection('electric-guitars').find({}).toArray();
-
-          case 43:
-            eGuitars = _context.sent;
-            console.log('Updating electric guitar prices...');
-            _context.next = 47;
-            return scrapeProducts(eGuitars, 'electric-guitars', page, db, eGuitarBar);
-
-          case 47:
-            _context.next = 49;
+            console.log("".concat(table, " prices updated."));
+            _context.next = 22;
             return client.close();
 
-          case 49:
-            _context.next = 51;
+          case 22:
+            _context.next = 24;
             return browser.pages();
 
-          case 51:
+          case 24:
             pages = _context.sent;
-            _context.next = 54;
+            _context.next = 27;
             return Promise.all(pages.map(function (page) {
               return page.close();
             }));
 
-          case 54:
-            _context.next = 56;
+          case 27:
+            _context.next = 29;
             return browser.close();
 
-          case 56:
+          case 29:
           case "end":
             return _context.stop();
         }
@@ -139,13 +100,13 @@ function _scrapePrices() {
   return _scrapePrices.apply(this, arguments);
 }
 
-function scrapeProducts(_x, _x2, _x3, _x4, _x5) {
+function scrapeProducts(_x2, _x3, _x4, _x5, _x6) {
   return _scrapeProducts.apply(this, arguments);
 }
 
 function _scrapeProducts() {
   _scrapeProducts = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(products, tableName, page, db, productBar) {
-    var i, product, productId, inStock, j, price, data, _data, _data2;
+    var i, product, productId, inStock, j, price, data, _data, _data2, priceNum, lowestPrices, priceDiff;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
@@ -229,7 +190,18 @@ function _scrapeProducts() {
             inStock = inStock ? inStock : _data2.inStock;
 
           case 33:
-            if (price) product.prices[j].price = price;
+            if (price) {
+              //update new product price
+              product.prices[j].price = price; //update wishlists with products
+
+              priceNum = (0, _priceUtil.priceToNumber)(price);
+              lowestPrices = (0, _priceUtil.getLowestNumber)(product.prices);
+
+              if (priceNum < lowestPrices) {
+                priceDiff = lowestPrices - priceNum;
+                (0, _wishlistService.updateWishlists)(db, priceDiff, productId);
+              }
+            }
 
           case 34:
             j++;
@@ -266,4 +238,7 @@ function _scrapeProducts() {
   return _scrapeProducts.apply(this, arguments);
 }
 
-scrapePrices();
+if (process.argv.length > 1) {
+  var table = process.argv[2];
+  scrapePrices(table);
+}

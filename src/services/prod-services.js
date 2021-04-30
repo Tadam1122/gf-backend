@@ -1,32 +1,15 @@
 import puppeteer from 'puppeteer'
 import { ObjectId } from 'mongodb'
+import cliProgress from 'cli-progress'
 import { connectClient } from '../db/connect'
-const cliProgress = require('cli-progress')
+import { getLowestNumber, priceToNumber } from '../utilities/priceUtil'
+import { updateWishlists } from './wishlistService'
 
-export async function scrapePrices() {
+export async function scrapePrices(table) {
   const client = await connectClient()
   const db = client.db(process.env.MONGO_DBNAME || 'guitar-finder')
 
-  const eGuitarBar = new cliProgress.SingleBar(
-    {},
-    cliProgress.Presets.shades_classic
-  )
-  const aGuitarBar = new cliProgress.SingleBar(
-    {},
-    cliProgress.Presets.shades_classic
-  )
-  const aAmpBar = new cliProgress.SingleBar(
-    {},
-    cliProgress.Presets.shades_classic
-  )
-  const eAmpBar = new cliProgress.SingleBar(
-    {},
-    cliProgress.Presets.shades_classic
-  )
-  const pedalBar = new cliProgress.SingleBar(
-    {},
-    cliProgress.Presets.shades_classic
-  )
+  const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 
   console.log('updating product prices...')
 
@@ -38,30 +21,11 @@ export async function scrapePrices() {
 
   page.setDefaultNavigationTimeout(0)
 
-  const eAmps = await db.collection('electric-amps').find({}).toArray()
+  const data = await db.collection(table).find({}).toArray()
 
-  console.log('Updating electric amplifier prices...')
-  await scrapeProducts(eAmps, 'electric-amps', page, db, eAmpBar)
-
-  const aAmps = await db.collection('acoustic-amps').find({}).toArray()
-
-  console.log('Updating acoustic amplifier prices...')
-  await scrapeProducts(aAmps, 'acoustic-amps', page, db, aAmpBar)
-
-  const pedals = await db.collection('effect-pedals').find({}).toArray()
-
-  console.log('Updating effect pedal prices...')
-  await scrapeProducts(pedals, 'effect-pedals', page, db, pedalBar)
-
-  const aGuitars = await db.collection('acoustic-guitars').find({}).toArray()
-
-  console.log('Updating acoustic guitar prices...')
-  await scrapeProducts(aGuitars, 'acoustic-guitars', page, db, aGuitarBar)
-
-  const eGuitars = await db.collection('electric-guitars').find({}).toArray()
-
-  console.log('Updating electric guitar prices...')
-  await scrapeProducts(eGuitars, 'electric-guitars', page, db, eGuitarBar)
+  console.log(`Updating ${table} prices...`)
+  await scrapeProducts(data, table, page, db, bar)
+  console.log(`${table} prices updated.`)
 
   await client.close()
 
@@ -111,7 +75,18 @@ async function scrapeProducts(products, tableName, page, db, productBar) {
           inStock = inStock ? inStock : data.inStock
         }
       }
-      if (price) product.prices[j].price = price
+      if (price) {
+        //update new product price
+        product.prices[j].price = price
+
+        //update wishlists with products
+        let priceNum = priceToNumber(price)
+        let lowestPrices = getLowestNumber(product.prices)
+        if (priceNum < lowestPrices) {
+          let priceDiff = lowestPrices - priceNum
+          updateWishlists(db, priceDiff, productId)
+        }
+      }
     }
     product.inStock = inStock
     await db
@@ -122,4 +97,7 @@ async function scrapeProducts(products, tableName, page, db, productBar) {
   productBar.stop()
 }
 
-scrapePrices()
+if (process.argv.length > 1) {
+  let table = process.argv[2]
+  scrapePrices(table)
+}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/index.css"],"names":[],"mappings":"AAAA,8BAKE,WAAY,CACZ,kBAAmB,CACnB,QACF","file":"main.e8868b1f.chunk.css","sourcesContent":["html,\nbody,\n#app,\n#app > div,\n#root {\n  height: 100%;\n  background: #f7f7f7;\n  margin: 0px;\n}\n"]}
